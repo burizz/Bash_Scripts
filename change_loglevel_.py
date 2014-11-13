@@ -47,3 +47,4 @@ if __name__ == '__main__':
 
 
 # Bug with executing the script where there is more than 1 file in each directory
+# Current error -  OSError: [Errno 20] Not a directory: 'path/to/file/fgfd.xml'
