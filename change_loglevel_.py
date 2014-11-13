@@ -43,3 +43,7 @@ if __name__ == '__main__':
     dir_path = "/var/apphome/tridion_cms/webapps/"
     backup_dir = "/tmp/eds1057/"
     backup_and_edit_files(dir_path, backup_dir)
+
+
+
+# Bug with executing the script where there is more than 1 file in each directory
