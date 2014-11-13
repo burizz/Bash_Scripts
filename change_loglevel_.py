@@ -40,7 +40,7 @@ def backup_and_edit_files(dir_path, backup_dir):
                 backup_and_edit_files(path, backup_dir)
 
 if __name__ == '__main__':
-    dir_path = "/var/apphome/tridion_cms/webapps/"
+    dir_path = ""   # Put full path to dir to search in
     backup_dir = "/tmp/eds1057/"
     backup_and_edit_files(dir_path, backup_dir)
 
