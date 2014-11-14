@@ -36,12 +36,12 @@ def backup_and_edit_files(dir_path, backup_dir):
                 replace_loglevel(path, source_text, replace_text)
                 processed_files.append(path)
                 print "Processed - %s" % path
-            else:
+            elif os.path.isdir(path): # Only descend into dirs
                 backup_and_edit_files(path, backup_dir)
 
 if __name__ == '__main__':
     dir_path = ""   # Put full path to dir to search in
-    backup_dir = "/tmp/eds1057/"
+    backup_dir = ""  # Dir to backup to
     backup_and_edit_files(dir_path, backup_dir)
 
 
