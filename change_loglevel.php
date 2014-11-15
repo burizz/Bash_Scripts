@@ -48,6 +48,8 @@
 		$logbackDir = ''; // main directory
 		$logFileName = ''; // log name
 		$backupDir = ''; // backup directory
+		$levelFrom = ''; // log level to replace
+		$levelTo = '';   // new log level
 		
 		foreach(scandir($logbackDir) as $itemID => $item){
 			if(is_file($logbackDir.$item) && $item != $logFileName){
@@ -69,7 +71,7 @@
 				echo "Working on file: " . $logPath . "<br>";
 			
 				backupLogFile($logPath, $backupDir, $backupLogName);
-				if(changeLogLevel($logPath)){
+				if(changeLogLevel($logPath, $levelFrom, $levelTo)){
 					echo "Log level changed successfully on: " . $logPath . "<br>";
 				}else{
 					echo "Could not change log level on: " . $logPath . "<br>";
