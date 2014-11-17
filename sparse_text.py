@@ -53,3 +53,5 @@ output_file.close()
 print()
 print(num_removals, 'occurances of the letter e removed')
 print('Percentage of data lost:' , int((num_removals / num_total_chars) * 100), '%')
+
+#

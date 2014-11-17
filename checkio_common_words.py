@@ -18,3 +18,5 @@ def common_words(first, second):
         print "There are no common words in the two strings."
     
     return result
+
+#

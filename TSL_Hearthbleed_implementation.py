@@ -3,6 +3,7 @@
 # Quick and dirty demonstration of CVE-2014-0160 by Jared Stafford (jspenguin@jspenguin.org)
 # The author disclaims copyright to this source code.
 # python script.py jira.XXXXXXXXXXX.com
+#
 
 import sys
 import struct

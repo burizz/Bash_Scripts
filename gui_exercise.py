@@ -30,3 +30,5 @@ photo = PhotoImage(file='danger.gif')
 canvas.image([0,0], image=photo)
 
 g.mainloop()
+
+#

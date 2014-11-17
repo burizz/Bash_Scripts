@@ -23,7 +23,7 @@ def walk_os_dirs(dirname):
             walk_os_dirs(path)
 
 
-
+#
 
 # class Time(object):
 #     """ Represents the time of day.

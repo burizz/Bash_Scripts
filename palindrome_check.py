@@ -48,3 +48,6 @@ while chars != empty_string:
             
     # get next string from user
     chars = input('Enter string to check: ')
+
+
+#

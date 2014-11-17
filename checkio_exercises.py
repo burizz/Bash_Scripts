@@ -100,3 +100,6 @@ def number_base(str_number, radix):
             return -1
  
 
+
+
+#
