@@ -18,6 +18,7 @@ def backup_file(file_to_backup, backup_destination):
         with open(path_to_backup, 'w') as backedup_file:
             for line in text:
                 backedup_file.write(line)
+                backedup_file.close()
 
     # subprocess.call(['cp', file_to_backup, backup_destination])
     print "Backing up file %s to folder : %s ! " % (file_to_backup, backup_destination)
