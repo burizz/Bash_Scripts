@@ -45,7 +45,7 @@
             return false;
         }
 
-        $logbackDir = ''; // main directory
+        $logbackDir = ''; // main dir
         $logFileName = ''; // log file name
         $backupDir = ''; // backup directory
         $levelFrom = ''; // log level to replace
