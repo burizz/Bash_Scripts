@@ -6,7 +6,6 @@ def backup_file(file_to_backup):
     """ Copy file to backup dir """
     destination_file = file_to_backup + "_bkp_eds1057"
     shutil.copyfile(file_to_backup, destination_file)
-
     print "Backing up file %s to file : %s ! " % (file_to_backup, destination_file)
 
 def replace_loglevel(file_to_edit, source_text, replace_text):
@@ -47,8 +46,14 @@ if __name__ == '__main__':
 """
 Runtime:
 
+Python:
 real	0m0.017s
 user	0m0.007s
 sys	    0m0.006s
+
+PHP:
+real	0m0.013s
+user	0m0.007s
+sys	0m0.004s
 
 """
