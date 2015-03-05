@@ -102,11 +102,11 @@ def get_match(pattern, string, color, ignore_case):
         index = index_find(pattern, string, ignore_case)
         return string if index != -1 else ''
 
-def print_result(print_header, header, print_lineno, lineno, print_line, line):
+def print_result(print_header, header.html, print_lineno, lineno, print_line, line):
     """Print result to standard output."""
     result = ''
     if print_header:
-        result += '%s' % header
+        result += '%s' % header.html
     if print_lineno:
         if len(result) > 0:
             result += ':'
