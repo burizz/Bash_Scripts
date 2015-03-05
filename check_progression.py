@@ -1,4 +1,4 @@
-def ArithGeo(arr):
+def Progression(arr):
     """
     Check if arr is a list of numbers that are in Arithmetic, Geometric or without any progression.
 
@@ -32,3 +32,8 @@ def ArithGeo(arr):
     else:
         return "-1"
  
+# Test function
+print Progression([2,4,16,24])
+print Progression([5,10,15])
+print Progression([2, 6, 18, 54])
+print Progression([2, 6])
