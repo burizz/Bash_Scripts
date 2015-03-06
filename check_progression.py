@@ -33,7 +33,7 @@ def Progression(arr):
         return "-1"
  
 # Test function
-print Progression([2,4,16,24])
-print Progression([5,10,15])
+print Progression([2, 4, 16, 24])
+print Progression([5, 10, 15])
 print Progression([2, 6, 18, 54])
 print Progression([2, 6])
