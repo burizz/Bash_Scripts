@@ -1,3 +1,8 @@
+# 2. copy given files and copy to a certain directory - if dir does not exist, create it
+# 3. zip given files
+# 5. find and print all strings that match a certain criteria from a file
+
+
 #!/usr/bin/env python
 import sys
 import os
