@@ -1,11 +1,7 @@
-# 2. copy given files and copy to a certain directory - if dir does not exist, create it
-# 3. zip given files
-# 5. find and print all strings that match a certain criteria from a file
-
-
 #!/usr/bin/env python
 import sys
 import os
+import subprocess
 
 def find_files():
     """
@@ -36,13 +32,32 @@ def walk_dirs(dir_name):
 
     return file_list, dir_list
 
-def zip_files():
-    pass
-def copy_files(source, destination): # if destination is missing create it
-    pass
-def grep_search(dir, pattern):
-    pass
 
+def copy_files(source, destination):
+    """ Copy source to destionation, if destination doesn't exist, it is created """ 
+    with open(source, 'r') as file_object:
+        text = file_object.read()
+        file_object.close()
+         
+    with open(destination, 'w') as write_object:
+        write_object.write(text)
+        write_object.close()
+    
+    print "Copied %s to %s" % (source, destination)
+
+
+def zip_files(name_of_zip, array_of_files):
+    """Create a ZIP file containing the array of files"""
+    #os.system('zip' + name_of_zip + array_of_files)
+    for item in array_of_files:
+        subprocess.call(['zip', name_of_zip, item])
 
 if __name__ == "__main__":
-    find_files()
+    #copy_files('/home/burizz/Desktop/sirenie.txt', '/home/burizz/Desktop/askldjs.txt')
+    #find_files()
+    zip_files('sirenie', ['/home/burizz/Desktop/asd', '/home/burizz/Desktop/askjdh'])
+
+
+# 5. find and print all strings that match a certain criteria from a file
+def grep_search(directory, pattern):
+    pass
