@@ -48,7 +48,6 @@ def copy_files(source, destination):
 
 def zip_files(name_of_zip, array_of_files):
     """Create a ZIP file containing the array of files"""
-    #os.system('zip' + name_of_zip + array_of_files)
     for item in array_of_files:
         subprocess.call(['zip', name_of_zip, item])
 
