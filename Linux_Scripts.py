@@ -57,6 +57,10 @@ def grep_search(file, pattern):
         for line in file_object.readlines():
             if line.find(pattern) != -1:
                 print line
+                
+def dir_space(path):
+    """ Check disk usage of a directory - provide full path"""
+    pass
 
 def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
