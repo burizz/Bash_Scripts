@@ -58,15 +58,43 @@ def grep_search(file, pattern):
             if line.find(pattern) != -1:
                 print line
                 
-def dir_space(path):
+def dir_usage(path):
     """ Check disk usage of a directory - provide full path"""
-    pass
+    cmd = 'du '
+    arg = '-sh '
+    os.system(cmd + arg + path)
+
+def check_port(port):
+    """ Check if a certain port is open, provide info about processes using it """
+    cmd = 'netstat '
+    arg = '-apn '
+    search = 'grep ' + port
+    os.system(cmd + arg + '|' +  search)
+
+def user_add(user_name, action):
+    """ Add or delete a Linux User - user, pass, add or delete"""
+    add = 'useradd '
+    delete = 'userdel '
+    if action == 'add':
+        os.system(add + user_name)
+        print "User %s created." % (user_name)
+        print "Switch to %s and execute passwd, to change your password" % (user_name)
+    elif action == 'delete':
+        os.system(delete + user_name)
+        print "User %s deleted" % (user_name)
+    else:
+        print "Action should be either 'add' or 'delete', not - %s" % (action)
+        
 
 def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
+    #walk_dirs('/home/burizz')
     #find_files()
     #zip_files('test123', ['/home/burizz/Desktop/asd', '/home/burizz/Desktop/askjdh'])
-    grep_search('/home/burizz/Desktop/asd', 'test123')
-            
+    #grep_search('/home/burizz/Desktop/asd', 'test123')
+    #dir_usage('/etc')
+    #check_port('631')
+    user_add('testing', 'delete')
+        
 if __name__ == "__main__":
     main()
