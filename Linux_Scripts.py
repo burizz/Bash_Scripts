@@ -57,9 +57,12 @@ def grep_search(file, pattern):
         for line in file_object.readlines():
             if line.find(pattern) != -1:
                 print line
-            
-if __name__ == "__main__":
+
+def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
     #find_files()
     #zip_files('test123', ['/home/burizz/Desktop/asd', '/home/burizz/Desktop/askjdh'])
     grep_search('/home/burizz/Desktop/asd', 'test123')
+            
+if __name__ == "__main__":
+    main()
