@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-import sys
+import sys # used for passing arguments to the script
 import os
 import subprocess
+import re # used for matching stuff in the apache log parsing function
 
 def find_files():
     """
@@ -85,6 +86,34 @@ def user_add(user_name, action):
     else:
         print "Action should be either 'add' or 'delete', not - %s" % (action)
         
+def server_info():
+    result = subprocess.Popen(['uname', '-a'], stdout=subprocess.PIPE)
+    uname = result.stdout.read()
+    return uname
+
+def apache_log_parser(log_path):
+    """ Parse access log to show only - return code, host, bytes_sent """
+    log_file = open(log_path, 'r')
+    for line in log_file.readlines():
+        #compile regex to match the values of status, host and bytes
+        log_line_re = re.compile(r'''(?P<remote_host>\S+) #IP ADDRESS
+                              \s+ #whitespace
+                              \S+ #remote logname
+                              \s+ #whitespace
+                              \S+ #remote user
+                              \s+ #whitespace
+                              \[[^\[\]]+\] #time
+                              \s+ #whitespace
+                              "[^"]+" #first line of request
+                              \s+ #whitespace
+                              (?P<status>\d+)
+                              \s+ #whitespace
+                              (?P<bytes_sent>-|\d+)
+                              \s* #whitespace
+                              ''', re.VERBOSE)
+        # match entries with regex
+        m = log_line_re.match(line)
+        print m.groupdict() # print a dictionary of the matched values
 
 def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
@@ -94,7 +123,9 @@ def main():
     #grep_search('/home/burizz/Desktop/asd', 'test123')
     #dir_usage('/etc')
     #check_port('631')
-    user_add('testing', 'delete')
+    #user_add('testing', 'delete')
+    #print server_info()
+    apache_log_parser('/var/log/httpd/access_log')
         
 if __name__ == "__main__":
     main()
