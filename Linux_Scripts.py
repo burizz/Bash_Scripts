@@ -3,6 +3,7 @@ import sys # used for passing arguments to the script
 import os
 import subprocess
 import re # used for matching stuff in the apache log parsing function
+import paramiko # used for connecting to servers over SSH
 
 def find_files():
     """
@@ -115,6 +116,20 @@ def apache_log_parser(log_path):
         m = log_line_re.match(line)
         print m.groupdict() # print a dictionary of the matched values
 
+def ssh_connect(hostname, port, user, passwd, command):
+    """ Connect to a server over SSH and execute commands """
+    paramiko.util.log_to_file('python_ssh.log')
+    ssh_client = paramiko.SSHClient()
+    ssh_client.load_system_host_keys() # load known_hosts file of the user
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # set policy to autoadd keys of unknown hosts
+    ssh_client.connect(hostname, port, user, passwd)
+    stdin, stdout, stderr = ssh_client.exec_command(command) # provide full_path to cmd in linux
+    output = stdout.read()
+    print "SSH connection successful. Closing connection..." 
+    ssh_client.close()
+    print "Connection closed !"
+    return output
+
 def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
     #walk_dirs('/home/burizz')
@@ -125,7 +140,8 @@ def main():
     #check_port('631')
     #user_add('testing', 'delete')
     #print server_info()
-    apache_log_parser('/var/log/httpd/access_log')
-        
+    #apache_log_parser('/var/log/httpd/access_log')
+    print ssh_connect('localhost', 22, 'burizz', 'case363166', '/sbin/ifconfig')
+    
 if __name__ == "__main__":
     main()
