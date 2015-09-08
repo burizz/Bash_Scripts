@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-import sys # used for passing arguments to the script
 import os
 import subprocess
 import re # used for matching stuff in the apache log parsing function
 import paramiko # used for connecting to servers over SSH
+import socket # used for the port checker
+import sys # used for passing arguments to the script
 
 def find_files():
     """
@@ -130,6 +131,16 @@ def ssh_connect(hostname, port, user, passwd, command):
     print "Connection closed !"
     return output
 
+def port_checker(address, port):
+    """ Check if a certain port is open - like telnet """
+    tcp_socket = socket.socket()
+    print "Attempting to connect to %s on port %s" % (address, port)
+    try:
+        tcp_socket.connect((address, port))
+        print "Connected to %s on port %s" % (address, port)
+    except socket.error, error:
+        print "Connection to %s on port %s failed: %s" % (address, port, error)
+
 def main():
     #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
     #walk_dirs('/home/burizz')
@@ -141,7 +152,8 @@ def main():
     #user_add('testing', 'delete')
     #print server_info()
     #apache_log_parser('/var/log/httpd/access_log')
-    print ssh_connect('localhost', 22, 'burizz', 'case363166', '/sbin/ifconfig')
-    
+    #print ssh_connect('localhost', 22, 'burizz', 'password', '/sbin/ifconfig')
+    port_checker('localhost', 80)
+
 if __name__ == "__main__":
     main()
