@@ -67,13 +67,6 @@ def dir_usage(path):
     arg = '-sh '
     os.system(cmd + arg + path)
 
-def check_port(port):
-    """ Check if a certain port is open, provide info about processes using it """
-    cmd = 'netstat '
-    arg = '-apn '
-    search = 'grep ' + port
-    os.system(cmd + arg + '|' +  search)
-
 def user_add(user_name, action):
     """ Add, delete or purge a Linux User - provide user, pass, action"""
     add = 'useradd '
