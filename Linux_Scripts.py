@@ -69,7 +69,7 @@ def dir_usage(path):
     arg = '-sh '
     os.system(cmd + arg + path)
 
-def user_add(user_name, action):
+def user_mod(user_name, action):
     """ Add, delete or purge a Linux User - provide user, pass, action"""
     add = 'useradd '
     delete = 'userdel '
