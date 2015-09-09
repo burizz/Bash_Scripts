@@ -53,6 +53,8 @@ def zip_files(name_of_zip, array_of_files):
     """Create a ZIP file containing the array of files"""
     for item in array_of_files:
         subprocess.call(['zip', name_of_zip, item])
+    pwd = os.cwd()
+    print "Created %s in %s." %s (name_of_zip, pwd)
 
 def grep_search(file, pattern):
     """ Pass file and pattern - if pattern in line, print the line """
