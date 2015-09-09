@@ -75,18 +75,27 @@ def check_port(port):
     os.system(cmd + arg + '|' +  search)
 
 def user_add(user_name, action):
-    """ Add or delete a Linux User - user, pass, add or delete"""
+    """ Add, delete or purge a Linux User - provide user, pass, action"""
     add = 'useradd '
     delete = 'userdel '
+    purge = 'userdel -r ' # Same as delete but removes home directory and files owned by the user
+
     if action == 'add':
         os.system(add + user_name)
         print "User %s created." % (user_name)
-        print "Switch to %s and execute passwd, to change your password" % (user_name)
+        passwd = str(raw_input("Enter password for the new user : "))
+        os.system('echo ' + passwd + ' | passwd --stdin ' + user_name)
+
     elif action == 'delete':
         os.system(delete + user_name)
         print "User %s deleted" % (user_name)
+
+    elif action == 'purge':
+        os.system(purge + user_name)
+        print "User %s purged - including his home directory and all their files" % (user_name)
+
     else:
-        print "Action should be either 'add' or 'delete', not - %s" % (action)
+        print "Action should be either 'add', 'delete' or 'purge', not - %s" % (action)
         
 def server_info():
     result = subprocess.Popen(['uname', '-a'], stdout=subprocess.PIPE)
@@ -149,11 +158,11 @@ def main():
     #grep_search('/home/burizz/Desktop/asd', 'test123')
     #dir_usage('/etc')
     #check_port('631')
-    #user_add('testing', 'delete')
+    user_add('testuser1234', 'add')
     #print server_info()
     #apache_log_parser('/var/log/httpd/access_log')
     #print ssh_connect('localhost', 22, 'burizz', 'password', '/sbin/ifconfig')
-    port_checker('localhost', 80)
+    #port_checker('localhost', 80)
 
 if __name__ == "__main__":
     main()
