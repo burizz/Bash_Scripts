@@ -6,7 +6,10 @@ import paramiko # used for connecting to servers over SSH
 import socket # used for the port checker
 import sys # used for passing arguments to the script
 
-# Add menu options for all funcs in the main() function.
+"""
+1. Add menu options for all funcs in the main() function.
+2. options_list = [] to be added in main() that has a list of each function
+"""
 
 def find_files():
     """
@@ -25,7 +28,7 @@ def find_files():
             print file
 
 def walk_dirs(dir_name):
-    """ Walk all dirs recursively and return all files, dirs with their full path """
+    """ Walk all dirs recursively and return all files and dirs with their full path """
     file_list = []
     dir_list = []
 
