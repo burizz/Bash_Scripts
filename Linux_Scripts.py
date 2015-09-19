@@ -6,6 +6,8 @@ import paramiko # used for connecting to servers over SSH
 import socket # used for the port checker
 import sys # used for passing arguments to the script
 
+# Add menu options for all funcs in the main() function.
+
 def find_files():
     """
     Linux Find in Python
