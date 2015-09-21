@@ -95,6 +95,7 @@ def port_checker(address, port):
         print "Connection to %s on port %s failed: %s" % (address, port, error)
 
 def server_info():
+    """ Display name and info of Kernel """
     result = subprocess.Popen(['uname', '-a'], stdout=subprocess.PIPE)
     uname = result.stdout.read()
     return uname
