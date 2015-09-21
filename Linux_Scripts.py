@@ -1,31 +1,21 @@
 #!/usr/bin/env python
-import os
-import subprocess
-import re # used for matching stuff in the apache log parsing function
-import paramiko # used for connecting to servers over SSH
-import socket # used for the port checker
-import sys # used for passing arguments to the script
+import os, subprocess, re, paramiko, socket, sys
 
-"""
-1. Add menu options for all funcs in the main() function.
-2. options_list = [] to be added in main() that has a list of each function
-"""
+# Review zip func...  should zip on relative path and work on dirs
+# Do a func with rsync implementation. To be used for copying dirs also. - shutil
+# Add case sens and insens to grep - string.lower()
 
-def find_files():
+def find_files(path, file_name):
     """
-    Linux Find in Python
-    find_files.py path_to_start_search filename_to_search_for
+    Recursive find
+    path_to_start_search pattern_in_filename_to_search_for
     """
-    arguments = sys.argv
-    path = arguments[1]
-    pattern = arguments[2]
 
     files = walk_dirs(path)[0]
-    dirs = walk_dirs(path)[1]
 
-    for file in files:
-        if pattern in file:
-            print file
+    for item in files:
+        if file_name in item:
+            print item
 
 def walk_dirs(dir_name):
     """ Walk all dirs recursively and return all files and dirs with their full path """
@@ -40,8 +30,7 @@ def walk_dirs(dir_name):
 
     return file_list, dir_list
 
-
-def copy_files(source, destination):
+def copy_file(source, destination):
     """ Copy source to destionation, if destination doesn't exist, it is created """
     with open(source, 'r') as file_object:
         text = file_object.read()
@@ -53,13 +42,11 @@ def copy_files(source, destination):
 
     print "Copied %s to %s" % (source, destination)
 
-
 def zip_files(name_of_zip, array_of_files):
     """Create a ZIP file containing the array of files"""
     for item in array_of_files:
         subprocess.call(['zip', name_of_zip, item])
     print "Created %s in %s." % (name_of_zip, os.getcwd())
-
 
 def grep_search(file, pattern):
     """ Pass file and pattern - if pattern in line, print the line """
@@ -67,7 +54,7 @@ def grep_search(file, pattern):
         for line in file_object.readlines():
             if line.find(pattern) != -1:
                 print line
-                
+
 def dir_usage(path):
     """ Check disk usage of a directory - provide full path"""
     cmd = 'du '
@@ -96,7 +83,17 @@ def user_mod(user_name, action):
 
     else:
         print "Action should be either 'add', 'delete' or 'purge', not - %s" % (action)
-        
+
+def port_checker(address, port):
+    """ Check if a certain port is open - like telnet """
+    tcp_socket = socket.socket()
+    print "Attempting to connect to %s on port %s" % (address, port)
+    try:
+        tcp_socket.connect((address, port))
+        print "Connected to %s on port %s" % (address, port)
+    except socket.error, error:
+        print "Connection to %s on port %s failed: %s" % (address, port, error)
+
 def server_info():
     result = subprocess.Popen(['uname', '-a'], stdout=subprocess.PIPE)
     uname = result.stdout.read()
@@ -135,34 +132,44 @@ def ssh_connect(hostname, port, user, passwd, command):
     ssh_client.connect(hostname, port, user, passwd)
     stdin, stdout, stderr = ssh_client.exec_command(command) # provide full_path to cmd in linux
     output = stdout.read()
-    print "SSH connection successful. Closing connection..." 
+    print "SSH connection successful. Closing connection..."
     ssh_client.close()
     print "Connection closed !"
     return output
 
-def port_checker(address, port):
-    """ Check if a certain port is open - like telnet """
-    tcp_socket = socket.socket()
-    print "Attempting to connect to %s on port %s" % (address, port)
-    try:
-        tcp_socket.connect((address, port))
-        print "Connected to %s on port %s" % (address, port)
-    except socket.error, error:
-        print "Connection to %s on port %s failed: %s" % (address, port, error)
-
 def main():
-    #copy_files('/home/burizz/Desktop/test.txt', '/home/burizz/Desktop/askldjs.txt')
+    os.system('clear')
+
+    #options_list = [find_files(), walk_dirs(), copy_file(), zip_files(), grep_search(), dir_usage(), user_mod(), port_checker(), server_info(), apache_log_parser(), ssh_connect()]
+    menu = ''
+
+    print "1. Find filenames that match a pattern."
+    print "2. Walk dirs recursively and return all filenames and directories"
+    print "3. Copy file."
+    print "4. Zip a list of files"
+    print "5. Grep - Search for a pattern in a file"
+    print "6. Disk usage of a directory"
+    print "7. User management - add, delete, purge(delete all user files and dirs)"
+    print "8. Test port availability - similar to Telnet"
+    print "9. Check server info"
+    print "10. Parse apache log file"
+    print "11. Execute command on remote server over SSH"
+
+    choice = int(raw_input("\nSelect option >> "))
+    # - check if option in range
+
+# How to test each Function
+    #find_files('/etc/', 'hosts')
     #walk_dirs('/home/burizz')
-    #find_files()
-    #zip_files('test123', ['/home/burizz/Desktop/asd', '/home/burizz/Desktop/askjdh'])
+    #copy_file('/home/burizz/Desktop/file1.txt', '/home/burizz/Desktop/file2.txt')
+    #zip_files('zip_file_name', ['/home/burizz/Desktop/file1', '/home/burizz/Desktop/file2'])
     #grep_search('/home/burizz/Desktop/asd', 'test123')
     #dir_usage('/etc')
-    #check_port('631')
-    user_add('testuser1234', 'add')
+    #user_mod('user_name', 'add')
+    #port_checker('localhost', 80)
     #print server_info()
     #apache_log_parser('/var/log/httpd/access_log')
-    #print ssh_connect('localhost', 22, 'burizz', 'password', '/sbin/ifconfig')
-    #port_checker('localhost', 80)
+    #print ssh_connect('localhost', 22, 'user', 'password', '/sbin/ifconfig')
 
 if __name__ == "__main__":
     main()
