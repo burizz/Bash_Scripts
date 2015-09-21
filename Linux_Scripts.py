@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os, subprocess, re, paramiko, socket, sys
 
+# Fix menu in main() - include usage specifics of each func
 # Review zip func...  should zip on relative path and work on dirs
 # Do a func with rsync implementation. To be used for copying dirs also. - shutil
 # Add case sens and insens to grep - string.lower()
@@ -142,7 +143,7 @@ def main():
     os.system('clear')
 
     #options_list = [find_files(), walk_dirs(), copy_file(), zip_files(), grep_search(), dir_usage(), user_mod(), port_checker(), server_info(), apache_log_parser(), ssh_connect()]
-    menu = ''
+    menu = '' #remove if not needed
 
     print "1. Find filenames that match a pattern."
     print "2. Walk dirs recursively and return all filenames and directories"
@@ -157,7 +158,7 @@ def main():
     print "11. Execute command on remote server over SSH"
 
     choice = int(raw_input("\nSelect option >> "))
-    # - check if option in range
+    # - check if choice in range of possible choices
 
 # How to test each Function
     #find_files('/etc/', 'hosts')
