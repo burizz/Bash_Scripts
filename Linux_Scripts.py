@@ -5,6 +5,7 @@ import os, subprocess, re, paramiko, socket, sys
 # Review zip func...  should zip on relative path and work on dirs
 # Do a func with rsync implementation. To be used for copying dirs also. - shutil
 # Add case sens and insens to grep - string.lower()
+# Check sed() from older_linux_stuff.py to implement something from it - can remove it there after.
 
 def find_files(path, file_name):
     """
