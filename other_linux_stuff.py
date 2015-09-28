@@ -30,8 +30,23 @@ def total_conn_number(output_string):
 
     print output_string[start_index:end_index]
     
+def get_gids():
+    """ Open Unix group file and return only the group IDs """
+
+    with open('/etc/group', 'r') as groups_file:
+        group_lines = []
+        for line in groups_file:
+            group_lines.append(line.strip().split(':'))
+    
+    gids = []
+    gid_index = 2
+    for item in group_lines:
+        gids.append(item[gid_index])
+	
+    print gids
 
 if __name__ == '__main__':
     edit_user_attrib('users.txt')
     output_string = "['PoolManager name:JDBC/BOSSCS', 'PoolManager object:2082207303', 'Total number of connections: 1 (max/min 10/1, reap/unused/aged 180/1800/0, connectiontimeout/purge 180/EntirePool)', '(testConnection/inteval false/0, stuck timer/time/threshold 0/0/0, surge time/connections 0/-1)', 'Shared Connection information (shared partitions 200)', '  No shared connections', '', 'Free Connection information (free distribution table/partitions 5/1)', '  (0)(0)MCWrapper id 2a405b3a  Managed connection WSRdbManagedConnectionImpl@2112be64  State:STATE_ACTIVE_FREE', '', '  Total number of connection in free pool: 1', 'UnShared Connection information']"
     total_conn_number(output_string)
+    get_gids()
