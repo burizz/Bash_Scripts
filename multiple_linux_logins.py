@@ -33,23 +33,23 @@ def store_users_and_hosts():
 
     # Build a list of hosts from hostnames.txt file
     with open('hostnames.txt', 'r') as hosts_object:
-        hostnames = hosts_object.read().replace(" ", "").strip().split()
+        hostnames = hosts_object.read().replace(" ", "").strip().split(",")
         hosts_object.close()
 
     return users, hostnames
 
 def main():
     port = 22
-    command = '/usr/bin/echo Test Login'
+    command = '/sbin/ifconfig'
     users, hostnames = store_users_and_hosts()
 
     for host in hostnames:
         for user in users:
-            ssh_connect(host, port, user, users[user], command)
+            print "%s logged in to %s" % (user, host)
+            print ssh_connect(host, port, user, users[user], command)
 
 if __name__ == "__main__":
     main()
 
-# Test stuff in main() work
 # Check how to encrypt, decrypt passwords
 # Check how to install paramiko from source
