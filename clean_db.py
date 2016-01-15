@@ -48,29 +48,29 @@ def send_dump(hostname, port, username, password, sql_file, dest_sql_file):
 
 def main():
     os.system('clear') # Clear screen before executing stuff
-
+    
     remote_host = "localhost"
     remote_port = 22
-    remote_user = "burizz"
-    remote_pass = "case363166"
+    remote_user = "user"
+    remote_pass = "pass"
 
     local_sql_file = "/home/mysql_dump.sql"
-    remote_sql_file = "/home/burizz/boris.sql"
+    remote_sql_file = "/home/dump.sql"
 
     db_host = 'localhost'
-    db_user = 'root'
-    db_pass = 'edatech1234'
-    db_name = 'openfire'
+    db_user = 'user'
+    db_pass = 'pass'
+    db_name = 'database_name'
     sql_dump_filename = '/home/mysql_dump.sql'
+
+    # Set command for importing SQL dump on remote server
+    remote_cmd = "mysql -u user -ppass db_name < %s" % (remote_sql_file)
 
     # Dump db on any host in local SQL file
     dump_database(db_host, db_user, db_pass, db_name, sql_dump_filename)
 
     # Send SQL dump to remote server
     send_dump(remote_host, remote_port, remote_user, remote_pass, local_sql_file, remote_sql_file)
-
-    # Set command for importing SQL dump on remote server
-    remote_cmd = ["mysql", "-u root", "-pedatech1234", "openfire", "<", remote_sql_file]
 
     # Import SQL dump on remote server in DB
     exec_remote_cmd(remote_host, remote_port, remote_user, remote_pass, remote_cmd)
