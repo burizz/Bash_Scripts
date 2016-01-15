@@ -66,7 +66,7 @@ def main():
     # Set command for importing SQL dump on remote server
     remote_cmd = "mysql -u user -ppass db_name < %s" % (remote_sql_file)
 
-    # Dump db on any host in local SQL file
+    # Dump db from any host in local SQL file
     dump_database(db_host, db_user, db_pass, db_name, sql_dump_filename)
 
     # Send SQL dump to remote server
