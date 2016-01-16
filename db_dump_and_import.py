@@ -36,18 +36,18 @@ def send_dump(hostname, port, username, password, sql_file, dest_sql_file):
     """ Send sql file to remote host over SCP """
 
     ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys() # load known_hosts file of the user
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # autoadd keys of unknown hosts
+    ssh.load_system_host_keys()  # load known_hosts file of the user
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # auto-add keys of unknown hosts
     ssh.connect(hostname, port, username, password)
 
     sftp = ssh.open_sftp()
-    sftp.put(sql_file, dest_sql_file) # Send src to remote dest over scp
+    sftp.put(sql_file, dest_sql_file)  # Send src to remote dest over scp
     sftp.close()
     ssh.close()
 
 
 def main():
-    os.system('clear') # Clear screen before executing stuff
+    os.system('clear')  # Clear screen before executing stuff
     
     remote_host = "localhost"
     remote_port = 22
