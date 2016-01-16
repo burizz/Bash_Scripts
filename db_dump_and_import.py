@@ -10,8 +10,8 @@ def exec_remote_cmd(remote_host, remote_port, remote_user, remote_pass, remote_c
     # paramiko.util.log_to_file('python_ssh.log')
 
     ssh_client = paramiko.SSHClient()
-    ssh_client.load_system_host_keys() # load known_hosts file of the user
-    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # autoadd keys of unknown hosts
+    ssh_client.load_system_host_keys()  # load known_hosts file of the user
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # auto-add keys of unknown hosts
     ssh_client.connect(remote_host, remote_port, remote_user, remote_pass)
 
     stdin, stdout, stderr = ssh_client.exec_command(remote_cmd)
