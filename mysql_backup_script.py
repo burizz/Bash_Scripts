@@ -3,16 +3,6 @@
 import smtplib, subprocess, gzip
 
 
-def send_mail(sender, receivers, message):
-
-    try:
-        smtpObj = smtplib.SMTP('localhost', 25)
-        smtpObj.sendmail(sender, receivers, message)
-        print "Successfully sent email"
-    except SMTPException:
-        print "Error: unable to send email"
-
-
 def dump_database(db_host, db_user, db_pass, sql_dump_filename):
     args = ["mysqldump", "-h", db_host, "-u", db_user, "-p" + db_pass, "--max_allowed_packet=512M", "--all-databases", "--ignore-table=mysql.event"]
 
@@ -24,6 +14,16 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename):
         f.close()
 
         return p.returncode
+
+
+def send_mail(sender, receivers, message):
+
+    try:
+        smtpObj = smtplib.SMTP('localhost', 25)
+        smtpObj.sendmail(sender, receivers, message)
+        print "Successfully sent email"
+    except SMTPException:
+        print "Error: unable to send email"
 
 
 def main():
