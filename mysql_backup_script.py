@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import smtplib, subprocess, gzip
+import smtplib, subprocess, gzip, shutil, 
 
 
 def dump_database(db_host, db_user, db_pass, sql_dump_filename):
@@ -9,12 +9,16 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename):
     with open(sql_dump_filename, 'w', 0) as f:
         p = subprocess.Popen(args, stdout=subprocess.PIPE)
         f.write(p.communicate()[0])
-        with gzip.open(f) as file_in:
-            sql_dump_filename.writelines(file_in)
         f.close()
 
-        return p.returncode
+    gziped_filename = "%s.gz" % (sql_dump_filename)
 
+    with open(sql_dump_filename, "rb") as file_in, gzip.open(gziped_filename, "wb") as file_out:
+            shutil.copyfileobj(file_in, file_out)
+            os.remove(sql_dump_filename) # Remove uncompressed file.
+
+    return p.returncode
+    
 
 def send_mail(sender, receivers, message):
 
