@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import smtplib, subprocess, gzip
-from email.mime.text import MIMEText
 
 
 def send_mail(sender, receivers, message):
