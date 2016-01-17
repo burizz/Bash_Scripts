@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import smtplib, subprocess, gzip, shutil, 
+import smtplib, subprocess, gzip, shutil, os 
 
 
 def dump_database(db_host, db_user, db_pass, sql_dump_filename):
