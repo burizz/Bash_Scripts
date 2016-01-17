@@ -13,4 +13,9 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename):
         return p.returncode
 
 if __name__ == "__main__":
-    print dump_database('localhost', 'root', '1234', 'dump_db.sql')
+    return_code = dump_database('localhost', 'root', '1234', 'dump_db.sql')
+
+    if return_code == 0:
+        print "Atlassian MySQL Backup - OK"
+    else:
+        print "Atlassian MySQL Backups gave an ERROR !"
