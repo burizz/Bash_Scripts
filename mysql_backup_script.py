@@ -31,10 +31,22 @@ def send_mail(sender, receivers, message):
         print "Error: unable to send email"
 
 
+def remove_old_dumps(backup_dir):
+    """ Remove dumps older than the last 3 """
+    now = time.time()
+
+    for file in os.listdir(backup_dir):
+        if os.stat(os.path.join(backup_dir, file)).st_mtime < now - 3 * 86400:
+            os.remove(os.path.join(backup_dir, file))
+
 def main():
 
     sender = "atlassian_mysql@eda-tech.com"
     receivers = ["borisy@delatek.com", "monitor@secureemail.biz"]
+
+    backup_dir = "/home/veeambackup"
+
+    remove_old_dumps(backup_dir)
 
     return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql")
 
@@ -44,8 +56,6 @@ def main():
     else:
         print "Atlassian MySQL Backups gave an ERROR !"
         send_mail(sender, receivers, "Atlassian MySQL Backups - Gave an ERROR!" "MySQL Backup failed - Need to investigate!!")
-
-    os.system("find /home/veeambackup/* -mtime +3 -exec rm {} \;") # Remove older dumps. Should keep only three.
 
 if __name__ == "__main__":
     main()
