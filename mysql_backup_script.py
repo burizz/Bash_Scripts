@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import smtplib, subprocess, gzip, shutil, os 
+import smtplib, subprocess, gzip, shutil, os, time
 
 
 def dump_database(db_host, db_user, db_pass, sql_dump_filename):
@@ -11,14 +11,15 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename):
         f.write(p.communicate()[0])
         f.close()
 
-    gziped_filename = "%s.gz" % (sql_dump_filename)
+    timestamp = time.strftime("%Y%m%d")
+    gzip_with_timestamp = "%s_%s.gz" % (sql_dump_filename, timestamp)
 
-    with open(sql_dump_filename, "rb") as file_in, gzip.open(gziped_filename, "wb") as file_out:
+    with open(sql_dump_filename, "rb") as file_in, gzip.open(gzip_with_timestamp, "wb") as file_out:
             shutil.copyfileobj(file_in, file_out)
-            os.remove(sql_dump_filename) # Remove uncompressed file.
+            os.remove(sql_dump_filename)  # Remove uncompressed file.
 
     return p.returncode
-    
+
 
 def send_mail(sender, receivers, message):
 
@@ -26,12 +27,11 @@ def send_mail(sender, receivers, message):
         smtpObj = smtplib.SMTP('localhost', 25)
         smtpObj.sendmail(sender, receivers, message)
         print "Successfully sent email"
-    except SMTPException:
+    except smtplib.SMTPException:
         print "Error: unable to send email"
 
 
 def main():
-    # Check how to add date timestamp to filename
 
     sender = "atlassian_mysql@eda-tech.com"
     receivers = ["borisy@delatek.com", "monitor@secureemail.biz"]
@@ -49,5 +49,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Get timestamp to add to filename
+
+print timestr
+
 # Remove old dumps should keep only 3.
