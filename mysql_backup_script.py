@@ -18,8 +18,6 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
             shutil.copyfileobj(file_in, file_out)
             os.remove(sql_dump_filename)  # Remove uncompressed file.
 
-    os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
-
     return p.returncode
 
 
@@ -50,3 +48,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Fix removing of last 3 dumps - 
+# os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
