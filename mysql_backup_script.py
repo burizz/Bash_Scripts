@@ -36,7 +36,7 @@ def main():
     sender = "atlassian_mysql@eda-tech.com"
     receivers = ["borisy@delatek.com", "monitor@secureemail.biz"]
 
-    return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian-all-$(date +%Y%m%d).sql")
+    return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql")
 
     if return_code == 0:
         print "Atlassian MySQL Backup - OK"
@@ -45,11 +45,7 @@ def main():
         print "Atlassian MySQL Backups gave an ERROR !"
         send_mail(sender, receivers, "Atlassian MySQL Backups - Gave an ERROR!" "MySQL Backup failed - Need to investigate!!")
 
+    os.system("find /home/veeambackup/* -mtime +3 -exec rm {} \;") # Remove older dumps. Should keep only three.
 
 if __name__ == "__main__":
     main()
-
-
-print timestr
-
-# Remove old dumps should keep only 3.
