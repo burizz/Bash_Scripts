@@ -3,7 +3,7 @@
 import smtplib, subprocess, gzip, shutil, os, time
 
 
-def dump_database(db_host, db_user, db_pass, sql_dump_filename):
+def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
     args = ["mysqldump", "-h", db_host, "-u", db_user, "-p" + db_pass, "--max_allowed_packet=512M", "--all-databases", "--ignore-table=mysql.event"]
 
     with open(sql_dump_filename, 'w', 0) as f:
@@ -18,6 +18,8 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename):
             shutil.copyfileobj(file_in, file_out)
             os.remove(sql_dump_filename)  # Remove uncompressed file.
 
+    os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
+
     return p.returncode
 
 
@@ -31,24 +33,13 @@ def send_mail(sender, receivers, message):
         print "Error: unable to send email"
 
 
-def remove_old_dumps(backup_dir):
-    """ Remove dumps older than the last 3 """
-    now = time.time()
-
-    for file in os.listdir(backup_dir):
-        if os.stat(os.path.join(backup_dir, file)).st_mtime < now - 3 * 86400:
-            os.remove(os.path.join(backup_dir, file))
-
 def main():
 
     sender = "atlassian_mysql@eda-tech.com"
     receivers = ["borisy@delatek.com", "monitor@secureemail.biz"]
-
     backup_dir = "/home/veeambackup"
 
-    remove_old_dumps(backup_dir)
-
-    return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql")
+    return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql", backup_dir)
 
     if return_code == 0:
         print "Atlassian MySQL Backup - OK"
