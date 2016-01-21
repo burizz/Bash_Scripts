@@ -66,6 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# Fix removing of last 3 dumps -
-# os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
