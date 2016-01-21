@@ -11,7 +11,7 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
         f.write(p.communicate()[0])
         f.close()
 
-    timestamp = time.strftime("%Y%m%d")
+    timestamp = time.strftime("%Y%m%d%")
     gzip_with_timestamp = "%s_%s.gz" % (sql_dump_filename, timestamp)
 
     with open(sql_dump_filename, "rb") as file_in, gzip.open(gzip_with_timestamp, "wb") as file_out:
@@ -31,28 +31,45 @@ def send_mail(sender, receivers, message):
         print "Error: unable to send email"
 
 
+def cleanup(backup_dir, files_to_keep):
+
+    file_data = {}
+
+    for filename in os.listdir(backup_dir):
+        file_data[filename] = os.stat(filename).st_mtime
+
+    sorted_files = sorted(file_data.items())
+
+    delete = len(sorted_files) - files_to_keep
+    for x in range(0, delete):
+        print "Removing %s" % (sorted_files[x][0])
+        os.remove(sorted_files[x][0])
+
+
+#    now = time.time()
+#    for f in os.listdir(backup_dir):
+#        fullpath = os.path.join(backup_dir, f)
+#        print fullpath
+#        if os.stat(fullpath).st_mtime < (now - 86400):
+#            os.remove(fullpath)
+#            print "Removed oldest backup - %s" % (fullpath)
+#    cleanup(backup_dir)
+
 def main():
 
     sender = "atlassian_mysql@eda-tech.com"
     receivers = ["borisy@delatek.com", "monitor@secureemail.biz"]
     backup_dir = "/home/veeambackup"
+    files_to_keep = 2
 
     return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql", backup_dir)
 
     if return_code == 0:
         print "Atlassian MySQL Backup - OK"
-        send_mail(sender, receivers, "Atlassian MySQL Backups - OK" "MySQL Backup completed successfully OK")
     else:
         print "Atlassian MySQL Backups gave an ERROR !"
-        send_mail(sender, receivers, "Atlassian MySQL Backups - Gave an ERROR!" "MySQL Backup failed - Need to investigate!!")
 
-    cleanup_cmd = ["find /home/veeambackup/* -mtime +3 -exec rm {} \;"]
-    p = subprocess.Popen(cleanup_cmd)
-    print p.returncode
-
+    cleanup(backup_dir, files_to_keep)
 
 if __name__ == "__main__":
     main()
-
-# Fix removing of last 3 dumps -
-# os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
