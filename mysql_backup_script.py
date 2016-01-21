@@ -67,4 +67,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# To test send_mail func
+# To test send_mail() func
