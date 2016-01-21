@@ -24,8 +24,8 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
 def send_mail(sender, receivers, message):
 
     try:
-        smtpObj = smtplib.SMTP('localhost', 25)
-        smtpObj.sendmail(sender, receivers, message)
+        smtp_object = smtplib.SMTP('localhost', 25)
+        smtp_object.sendmail(sender, receivers, message)
         print "Successfully sent email"
     except smtplib.SMTPException:
         print "Error: unable to send email"
@@ -46,8 +46,12 @@ def main():
         print "Atlassian MySQL Backups gave an ERROR !"
         send_mail(sender, receivers, "Atlassian MySQL Backups - Gave an ERROR!" "MySQL Backup failed - Need to investigate!!")
 
+    cleanup_cmd = ["find /home/veeambackup/* -mtime +3 -exec rm {} \;"]
+    p = subprocess.Popen(cleanup_cmd)
+
+
 if __name__ == "__main__":
     main()
 
-# Fix removing of last 3 dumps - 
+# Fix removing of last 3 dumps -
 # os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
