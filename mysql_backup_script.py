@@ -42,7 +42,7 @@ def cleanup(backup_dir, files_to_keep):
 
     delete = len(sorted_files) - files_to_keep
     for x in range(0, delete):
-        print "Removing %s" % (sorted_files[x][0])
+        print "Removed %s" % (sorted_files[x][0])
         os.remove(sorted_files[x][0])
 
 
