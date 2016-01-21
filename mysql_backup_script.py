@@ -48,6 +48,7 @@ def main():
 
     cleanup_cmd = ["find /home/veeambackup/* -mtime +3 -exec rm {} \;"]
     p = subprocess.Popen(cleanup_cmd)
+    print p.returncode
 
 
 if __name__ == "__main__":
