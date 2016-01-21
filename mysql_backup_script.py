@@ -11,7 +11,7 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
         f.write(p.communicate()[0])
         f.close()
 
-    timestamp = time.strftime("%Y%m%d")
+    timestamp = time.strftime("%Y_%m_%d")
     gzip_with_timestamp = "%s_%s.gz" % (sql_dump_filename, timestamp)
 
     with open(sql_dump_filename, "rb") as file_in, gzip.open(gzip_with_timestamp, "wb") as file_out:
@@ -42,7 +42,8 @@ def cleanup(backup_dir, files_to_keep):
 
     delete = len(sorted_files) - files_to_keep
     for x in range(0, delete):
-        print "Removed %s" % (sorted_files[x][0])
+        print "Removed older backup - %s" % (sorted_files[x][0])
+        print "Keeping the last %s backups" % (files_to_keep)
         os.remove(sorted_files[x][0])
 
 
