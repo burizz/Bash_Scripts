@@ -11,7 +11,7 @@ def dump_database(db_host, db_user, db_pass, sql_dump_filename, backup_dir):
         f.write(p.communicate()[0])
         f.close()
 
-    timestamp = time.strftime("%Y%m%d%")
+    timestamp = time.strftime("%Y%m%d")
     gzip_with_timestamp = "%s_%s.gz" % (sql_dump_filename, timestamp)
 
     with open(sql_dump_filename, "rb") as file_in, gzip.open(gzip_with_timestamp, "wb") as file_out:
@@ -46,15 +46,6 @@ def cleanup(backup_dir, files_to_keep):
         os.remove(sorted_files[x][0])
 
 
-#    now = time.time()
-#    for f in os.listdir(backup_dir):
-#        fullpath = os.path.join(backup_dir, f)
-#        print fullpath
-#        if os.stat(fullpath).st_mtime < (now - 86400):
-#            os.remove(fullpath)
-#            print "Removed oldest backup - %s" % (fullpath)
-#    cleanup(backup_dir)
-
 def main():
 
     sender = "atlassian_mysql@eda-tech.com"
@@ -63,13 +54,17 @@ def main():
     files_to_keep = 2
 
     return_code = dump_database("localhost", "root", "1234", "/home/veeambackup/atlassian_mysql_backup.sql", backup_dir)
+    cleanup(backup_dir, files_to_keep)
 
     if return_code == 0:
         print "Atlassian MySQL Backup - OK"
+        send_mail(sender, receivers, "Atlassian MySQL Backups - OK" "MySQL Backup completed successfully OK")
     else:
         print "Atlassian MySQL Backups gave an ERROR !"
-
-    cleanup(backup_dir, files_to_keep)
+        send_mail(sender, receivers, "Atlassian MySQL Backups - Gave an ERROR!" "MySQL Backup failed - Need to investigate!!")
 
 if __name__ == "__main__":
     main()
+
+# Fix removing of last 3 dumps -
+# os.remove(min(os.listdir(backup_dir), key=os.path.getctime)) # Remove oldest dump file
