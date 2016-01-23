@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, subprocess, re, paramiko, socket, sys
+import os, subprocess, re, paramiko, socket
 
 # Fix menu in main() - include usage specifics of each func
 # Review zip func...  should zip on relative path and work on dirs
