@@ -98,8 +98,3 @@ def number_base(str_number, radix):
             return number
         except ValueError:
             return -1
- 
-
-
-
-#
