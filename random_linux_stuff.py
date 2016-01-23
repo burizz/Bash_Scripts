@@ -159,7 +159,7 @@ def ssh_connect(hostname, port, user, passwd, command):
 
 
 def main():
-    os.system('clear')
+    os.system('clear')  # Clear screen
 
     #options_list = [find_files(), walk_dirs(), copy_file(), zip_files(), grep_search(), dir_usage(), user_mod(), port_checker(), server_info(), apache_log_parser(), ssh_connect()]
     menu = '' #remove if not needed
