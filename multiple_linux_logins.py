@@ -52,4 +52,3 @@ if __name__ == "__main__":
     main()
 
 # Check how to encrypt, decrypt passwords
-# Check how to install paramiko from source
