@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-import os
-import shutil
+import os shutil
+
 
 def backup_file(file_to_backup):
     """ Copy file to backup dir """
     destination_file = file_to_backup + "_bkp_eds1057"
     shutil.copyfile(file_to_backup, destination_file)
     print "Backing up file %s to file : %s ! " % (file_to_backup, destination_file)
+
 
 def replace_loglevel(file_to_edit, source_text, replace_text):
     """ Open file and replace the source_text with the replace_text strings """
@@ -19,10 +20,6 @@ def replace_loglevel(file_to_edit, source_text, replace_text):
     file_to_write.close()
     print "Replacing string %s with string %s in file %s" % (source_text, replace_text, file_to_edit)
 
-file_to_edit = "logback.xml"
-source_text = "TRACE"
-replace_text = "ERROR"
-processed_files = []  # Array used to keep track of all files that have been processed
 
 def backup_and_edit_files(dir_path):
     """ Backup the file and replace the source_text with replace_text """
@@ -39,9 +36,18 @@ def backup_and_edit_files(dir_path):
             elif os.path.isdir(path): # Only descend into dirs
                 backup_and_edit_files(path)
 
-if __name__ == '__main__':
+
+def main():
+    file_to_edit = "logback.xml"
+    source_text = "TRACE"
+    replace_text = "ERROR"
+    processed_files = []  # Array used to keep track of all files that have been processed
+
     dir_path = ""   # Put full path to dir to search in
     backup_and_edit_files(dir_path)
+    
+if __name__ == '__main__':
+    main()
 
 """
 Runtime:
