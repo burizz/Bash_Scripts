@@ -7,10 +7,12 @@ import os, subprocess, re, paramiko, socket, sys
 # Add case sens and insens to grep - string.lower()
 # Check sed() from older_linux_stuff.py to implement something from it - can remove it there after.
 
+
 def find_files(path, file_name):
     """
     Recursive find
-    path_to_start_search pattern_in_filename_to_search_for
+    path == Starting point
+    file_name == File name to search for
     """
 
     files = walk_dirs(path)[0]
@@ -18,6 +20,7 @@ def find_files(path, file_name):
     for item in files:
         if file_name in item:
             print item
+
 
 def walk_dirs(dir_name):
     """ Walk all dirs recursively and return all files and dirs with their full path """
@@ -32,6 +35,7 @@ def walk_dirs(dir_name):
 
     return file_list, dir_list
 
+
 def copy_file(source, destination):
     """ Copy source to destionation, if destination doesn't exist, it is created """
     with open(source, 'r') as file_object:
@@ -44,11 +48,13 @@ def copy_file(source, destination):
 
     print "Copied %s to %s" % (source, destination)
 
+
 def zip_files(name_of_zip, array_of_files):
     """Create a ZIP file containing the array of files"""
     for item in array_of_files:
         subprocess.call(['zip', name_of_zip, item])
     print "Created %s in %s." % (name_of_zip, os.getcwd())
+
 
 def grep_search(file, pattern):
     """ Pass file and pattern - if pattern in line, print the line """
@@ -57,11 +63,13 @@ def grep_search(file, pattern):
             if line.find(pattern) != -1:
                 print line
 
+
 def dir_usage(path):
-    """ Check disk usage of a directory - provide full path"""
+    """ Check disk usage of a directory - provide full path """
     cmd = 'du '
     arg = '-sh '
     os.system(cmd + arg + path)
+
 
 def user_mod(user_name, action):
     """ Add, delete or purge a Linux User - provide user, pass, action"""
@@ -77,14 +85,15 @@ def user_mod(user_name, action):
 
     elif action == 'delete':
         os.system(delete + user_name)
-        print "User %s deleted" % (user_name)
+        print "User %s deleted" % user_name
 
     elif action == 'purge':
         os.system(purge + user_name)
-        print "User %s purged - including his home directory and all their files" % (user_name)
+        print "User %s purged - including his home directory and all their files" % user_name
 
     else:
-        print "Action should be either 'add', 'delete' or 'purge', not - %s" % (action)
+        print "Action should be either 'add', 'delete' or 'purge', not - %s" % action
+
 
 def port_checker(address, port):
     """ Check if a certain port is open - like telnet """
@@ -96,11 +105,13 @@ def port_checker(address, port):
     except socket.error, error:
         print "Connection to %s on port %s failed: %s" % (address, port, error)
 
+
 def server_info():
     """ Display name and info of Kernel """
     result = subprocess.Popen(['uname', '-a'], stdout=subprocess.PIPE)
     uname = result.stdout.read()
     return uname
+
 
 def apache_log_parser(log_path):
     """ Parse access log to show only - return code, host, bytes_sent """
@@ -126,6 +137,7 @@ def apache_log_parser(log_path):
         m = log_line_re.match(line)
         print m.groupdict() # print a dictionary of the matched values
 
+
 def ssh_connect(hostname, port, user, passwd, command):
     """ Connect to a server over SSH and execute commands """
     paramiko.util.log_to_file('python_ssh.log')
@@ -139,6 +151,7 @@ def ssh_connect(hostname, port, user, passwd, command):
     ssh_client.close()
     print "Connection closed !"
     return output
+
 
 def main():
     os.system('clear')
