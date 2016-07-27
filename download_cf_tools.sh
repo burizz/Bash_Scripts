@@ -5,11 +5,11 @@
 #
 # * curl
 # * tar
-# * grep
 
-BASE_DIR=`pwd`
+# Directory to store all downloaded files
+DWNLD_DIR="/srv/jas/data/download"
 
-# Get latest versions of each component -----------------------------------------------------------------------------------------------------------------------------------#
+# Get latest available versions of each component -----------------------------------------------------------------------------------------------------------------------------------#
 
 # cf_uaac
 cf_uaac_version=$(curl -k -L https://api.github.com/repos/cloudfoundry/cf-uaac/releases/latest | grep tag_name | cut -d":" -f2 | tr -d '", ')
@@ -32,63 +32,54 @@ redis_plugin_version=$(curl -k -L https://api.github.com/repos/pivotalservices/c
 # mysql-plugin
 mysql_plugin_version=$(curl -k -L https://api.github.com/repos/pivotalservices/cfops-mysql-plugin/releases/latest | grep tag_name | cut -d":" -f2 | tr -d '", ')
 
-# ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ #
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-### Update CF UAAC if a newer version is available ###
+### CF UAAC ###
 
-# Check if version is newest
-if $cf_uaac_version
+# Check if newest version of cf_uaac is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$cf_uaac_version.tar.gz ]; then \
+curl -k -L -o $DWNLD_DIR/cf-uaac-$cf_uaac_version.tar.gz $(curl -k -L https://api.github.com/repos/cloudfoundry/cf-uaac/releases/latest | grep "tarball_url" |grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
 
-# Download latest cf_uaac_version
-curl -k -L -o cf-uaac-$cf_uaac_version.tar.gz $(curl -k -L https://api.github.com/repos/cloudfoundry/cf-uaac/releases/latest | grep "tarball_url" |grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+### CF CLI ###
 
-###  ###
+# Check if newest version of cf_cli is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-cli-$cf_cli_version ]; then \
+curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx && \
+mv cf cf-cli-$cf_cli_version \
+; fi
 
-### Update CF CLI and its Plugins if newer versions are available ###
+### Update CFOPS and Plugins ###
 
-# Check if version is newest
-if $cf_cli_version
-
-# Download latest binary
-curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
-
-# Check version
-./cf version
-
-### ###
-
-### Update CFOPS and its Plugins if newer versions are available ###
-
-# Check if version is newest
-if $cfops_version
-
-# Download latest cfops binary 
-curl -v -k -L -o cfops_binaries-$cfops_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops/releases/latest | grep cfops_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+# Check if newest version of cfops is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$cfops_version.tar.gz ]; then \
+curl -v -k -L -o $DWNLD_DIR/cfops_binaries-$cfops_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops/releases/latest | grep cfops_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
 
 ## NFS-Plugin
 
-# Check if version is newest
-if $cfops_nfs_plugin_version
-
-curl -v -k -L -o cfops-nfs-plugin_binaries-$cfops_nfs_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-nfs-plugin/releases/latest | grep cfops-nfs-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+# Check if newest version of nfs-plugin is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$cfops_nfs_plugin_version.tar.gz ]; then \
+curl -v -k -L -o $DWNLD_DIR/cfops-nfs-plugin_binaries-$cfops_nfs_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-nfs-plugin/releases/latest | grep cfops-nfs-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
 
 ## RabbitMQ 
 
-# Check if version is newest
-if $rabbit_mq_plugin_version
-
-curl -v -k -L -o cfops-nfs-plugin_binaries-$rabbit_mq_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-rabbitmq-plugin/releases/latest | grep cfops-rabbitmq-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+# Check if newest version of rabbit-mq-plugin is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$rabbit_mq_plugin_version.tar.gz ]; then \
+curl -v -k -L -o $DWNLD_DIR/cfops-rabbit-mq-plugin-binaries-$rabbit_mq_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-rabbitmq-plugin/releases/latest | grep cfops-rabbitmq-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
 
 ## Redis plugin
 
-# Check if version is newest
-if $redis_plugin_version
-
-curl -v -k -L -o cfops-redis-plugin_binaries-$redis_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-redis-plugin/releases/latest | grep cfops-redis-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+# Check if newest version of redis-plugin is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$redis_plugin_version.tar.gz ]; then \
+curl -v -k -L -o $DWNLD_DIR/cfops-redis-plugin_binaries-$redis_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-redis-plugin/releases/latest | grep cfops-redis-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
 
 ## MySQL plugin
 
-# Check if version is newest
-if $mysql_plugin_version
-
-curl -v -k -L -o cfops-mysql-plugin_binaries-$mysql_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-mysql-plugin/releases/latest | grep cfops-mysql-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*")
+# Check if newest version of mysql-plugin is already downloaded, if not, download it.
+if [ ! -f $DWNLD_DIR/cf-uaac-$mysql_plugin_version.tar.gz ]; then \
+curl -v -k -L -o $DWNLD_DIR/cfops-mysql-plugin_binaries-$mysql_plugin_version.tgz $(curl -s -k -L https://api.github.com/repos/pivotalservices/cfops-mysql-plugin/releases/latest | grep cfops-mysql-plugin_binaries.tgz | grep browser_download_url | grep -Eo "(http|https)://[\da-z./?A-Z0-9\D=_-]*") \
+; fi
